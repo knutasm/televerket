@@ -1,0 +1,133 @@
+version: 2
+
+models:
+  - name: int__customers_enriched
+    description: >
+      One row per customer, enriched with their latest active contract.
+      Preferences (language, paperless, marketing) are carried through from
+      staging. Customers without any active contract retain null contract
+      columns.
+    config:
+      tags:
+        - customer
+    columns:
+      - name: customer_id
+        description: Primary key. Inherited from stg__crm_customers.
+      - name: full_name
+        description: Customer full name from CRM.
+      - name: status
+        description: Customer account status from CRM (active, suspended, etc.).
+      - name: preferred_language
+        description: Preferred communication language. Null if not set in CRM.
+      - name: paperless_billing
+        description: True if the customer has opted in to paperless billing.
+      - name: marketing_opt_in
+        description: True if the customer has consented to marketing communication.
+      - name: contract_id
+        description: >
+          ID of the latest active contract. Null for customers with no
+          active contract.
+      - name: product_code
+        description: Product code of the latest active contract.
+      - name: contract_start_date
+        description: Start date of the latest active contract.
+      - name: monthly_fee_eur
+        description: Monthly fee in EUR for the latest active contract.
+      - name: contract_status
+        description: Status of the latest active contract.
+
+  - name: int__billing_invoice_settlement
+    description: >
+      One row per invoice, enriched with the first payment received for
+      that invoice. Duplicate payments are deduplicated by taking the
+      earliest paid_on date. Invoices with no payment have null payment
+      columns and is_paid = false.
+    config:
+      tags:
+        - billing
+    columns:
+      - name: invoice_id
+        description: Primary key. Inherited from stg__billing_invoices.
+      - name: customer_id
+        description: Customer the invoice belongs to.
+      - name: invoice_date
+        description: Date the invoice was issued.
+      - name: due_date
+        description: Payment due date.
+      - name: amount_eur
+        description: Invoice amount in EUR. Negative for credit notes.
+      - name: status
+        description: Invoice status from the billing system.
+      - name: payment_id
+        description: ID of the first payment received. Null if unpaid.
+      - name: paid_on
+        description: Date the first payment was received. Null if unpaid.
+      - name: amount_paid
+        description: Amount of the first payment. Null if unpaid.
+      - name: payment_method
+        description: Payment method used (e.g. ideal, card). Null if unpaid.
+      - name: is_paid
+        description: True if at least one payment exists for this invoice.
+
+  - name: int__customers_activations
+    description: >
+      One row per customer, enriched with their most recent network service
+      activation and unpacked device information from device_info JSON.
+      Customers with multiple activations (upgrades) retain only the latest.
+    config:
+      tags:
+        - customer
+        - network
+    columns:
+      - name: customer_id
+        description: Primary key. Inherited from stg__crm_customers.
+      - name: full_name
+        description: Customer full name from CRM.
+      - name: activation_id
+        description: ID of the latest network activation. Null if never activated.
+      - name: msisdn
+        description: Mobile number associated with the activation.
+      - name: activated_at
+        description: Timestamp of the latest activation.
+      - name: device_make
+        description: Device manufacturer (e.g. Apple, Samsung).
+      - name: device_model
+        description: Device model name.
+      - name: device_os
+        description: Operating system, lowercased for consistency.
+      - name: device_imei
+        description: Device IMEI. Null for some older activation records.
+
+  - name: int__network_incidents_enriched
+    description: >
+      One row per network incident, enriched with customer name, account
+      status, and contract status from int__customers_enriched. Unresolved
+      incidents are retained with null resolved_at and resolution_time_minutes.
+    config:
+      tags:
+        - network
+    columns:
+      - name: incident_id
+        description: Primary key. Inherited from stg__network_incidents.
+      - name: customer_id
+        description: Customer affected by the incident.
+      - name: reported_at
+        description: Timestamp when the incident was reported.
+      - name: resolved_at
+        description: Timestamp when the incident was resolved. Null if still open.
+      - name: type
+        description: Incident type (e.g. outage, degraded_signal).
+      - name: region
+        description: Geographic region where the incident occurred.
+      - name: severity
+        description: Incident severity (high, medium, low).
+      - name: customer_name
+        description: Full name of the affected customer.
+      - name: customer_status
+        description: Account status of the affected customer at query time.
+      - name: contract_status
+        description: Contract status of the affected customer at query time.
+      - name: resolution_time_minutes
+        description: >
+          Minutes between reported_at and resolved_at. Null for unresolved
+          incidents.

@@ -1,0 +1,37 @@
+version: 2
+
+models:
+  - name: stg__crm_customers
+    description: >
+      One row per customer from the CRM source. Renames custID, casts
+      created_at to date, and unpacks address and preferences JSON fields.
+
+  - name: stg__crm_contracts
+    description: >
+      One row per contract from the CRM source. Renames cust_id to
+      customer_id and casts monthly_fee from VARCHAR to decimal.
+
+  - name: stg__billing_invoices
+    description: >
+      One row per invoice from the billing source. Renames InvoiceID,
+      converts YYYYMMDD date strings to DATE, and casts amount_eur to decimal.
+
+  - name: stg__billing_payments
+    description: >
+      One row per payment record from the billing source. Contains
+      duplicates — deduplicated in the intermediate layer.
+
+  - name: stg__network_service_activations
+    description: >
+      One row per network activation from the OSS source. Renames cust_id
+      to customer_id. device_info JSON is unpacked in the intermediate layer.
+
+  - name: stg__network_incidents
+    description: >
+      One row per network incident from the OSS source. Renames inc_id to
+      incident_id and customer_ref to customer_id.
+
+  - name: stg__catalog_products
+    description: >
+      One row per product version from the product catalog. Includes
+      valid_from / valid_to for historical versions.

@@ -28,3 +28,7 @@ models:
   televerket:
     standardize:
       +materialized: view
+    staging:
+      +materialized: view
+    intermediate:
+      +materialized: table

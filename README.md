@@ -122,3 +122,5 @@ The table below shows how columns arrive in BigQuery. Types marked as *intention
 | `network_incidents` | `reported_at`, `resolved_at` | TIMESTAMP | |
 | `catalog_products` | `monthly_fee_eur` | FLOAT | |
 | `catalog_products` | `valid_from`, `valid_to` | DATE | |
+
+heihei

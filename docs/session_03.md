@@ -309,6 +309,47 @@ SQL-en i makroen `parse_yyyymmdd('invoice_date')` like overalt. dbt tar seg av �
 
 ---
 
+## Eksempel: `sample`
+
+`TABLESAMPLE SYSTEM` lar databasen returnere en tilfeldig andel av datablokker i tabellen uten å lese hele tabellen.
+Det er nytting for å begrense kostnader under utvikling i BQ, hvor man betaler for antal bytes _scannet_ (ikke returnert). `LIMIT` begrenser bare hbor mange rader du får som _output_, ikke hvor mange som scannes. 
+
+Ulempen er at resultatet er **ikke-deterministisk**: du får ulike rader hver kjøring. Det gjør det vanskeligere å reprodusere feil og kan skjule bugs som bare dukker opp med bestemte dataverdier.
+
+Noen databaser støtter native sampling; andre er enklest å begrense med `LIMIT`. Med `adapter.dispatch` og to parametere — `fraction` og `limit` — håndterer makroen begge:
+
+```sql
+{% macro sample(fraction=10, limit=1000) %}
+    {{ return(adapter.dispatch('sample')(fraction, limit)) }}
+{% endmacro %}
+
+{% macro default__sample(fraction, limit) %}
+    limit {{ limit }}
+{% endmacro %}
+
+{% macro bigquery__sample(fraction, limit) %}
+    tablesample system ({{ fraction }} percent)
+{% endmacro %}
+
+{% macro snowflake__sample(fraction, limit) %}
+    sample ({{ fraction }})
+{% endmacro %}
+
+{% macro duckdb__sample(fraction, limit) %}
+    using sample {{ fraction }} percent
+{% endmacro %}
+```
+
+Kallet er likt overalt — makroen velger riktig syntaks:
+
+```sql
+select *
+from {{ source('billing', 'billing_invoices') }}
+{% if target.name != 'prod' %}{{ sample() }}{% endif %}
+```
+
+---
+
 ## `generate_schema_name` — overstyring av dbt-standard
 
 dbt har innebygde makroer som kan overstyres ved å definere en makro med samme navn. `generate_schema_name` styrer hvordan skjemanavn settes:

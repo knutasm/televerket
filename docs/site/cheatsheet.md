@@ -1,516 +1,143 @@
 ---
-layout: false
+title: dbt cheat sheet
+aside: false
 ---
 
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=DM+Sans:wght@400;500;600&display=swap');
+# dbt cheat sheet
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+## Select-syntaks
 
-  :root {
-    --bg:        #0f1117;
-    --bg2:       #181c27;
-    --bg3:       #1e2333;
-    --border:    #2a2f42;
-    --text:      #e2e6f0;
-    --muted:     #7a8099;
-    --code-bg:   #252b3b;
-    --accent1:   #7c8fff;
-    --accent2:   #4ecdc4;
-    --accent3:   #ffd166;
-    --accent4:   #f97b6b;
-    --accent5:   #a8e6a3;
-    --tag-text:  #0f1117;
-    --mono: 'JetBrains Mono', monospace;
-    --sans: 'DM Sans', sans-serif;
-  }
+### Velg modeller
 
-  html { font-size: 13px; }
-  body {
-    font-family: var(--sans);
-    background: var(--bg);
-    color: var(--text);
-    padding: 2rem;
-    line-height: 1.5;
-    min-height: 100vh;
-  }
+| Kommando | Beskrivelse |
+|---|---|
+| `dbt run` | Kjør alle modeller i prosjektet |
+| `dbt run -s stg_crm__customers` | Kjør én spesifikk modell |
+| `dbt run -s staging` | Kjør alle modeller i en mappe |
+| `dbt run -s tag:daily` | Velg modeller med et bestemt tag |
 
-  .page-header {
-    display: flex;
-    align-items: baseline;
-    gap: 1rem;
-    margin-bottom: 2rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid var(--border);
-  }
-  .page-header h1 {
-    font-family: var(--mono);
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: var(--text);
-    letter-spacing: -0.02em;
-  }
-  .page-header .subtitle {
-    font-size: 0.85rem;
-    color: var(--muted);
-  }
+### Grafsyntaks
 
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.25rem;
-  }
+| Kommando | Beskrivelse |
+|---|---|
+| `dbt run -s +mart_customer_360` | Modellen og alle oppstrøms-avhengigheter |
+| `dbt run -s mart_customer_360+` | Modellen og alle nedstrøms-avhengigheter |
+| `dbt run -s +mart_customer_360+` | Hele grafen i begge retninger |
+| `dbt run -s 1+stg_crm__customers` | Maks 1 nivå oppstrøms |
+| `dbt run -s stg_crm__customers+1` | Maks 1 nivå nedstrøms |
 
-  .section {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  .section.full-width { grid-column: 1 / -1; }
+### Kombinere og ekskludere
 
-  .section-header {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    padding: 0.7rem 1rem;
-    border-bottom: 1px solid var(--border);
-  }
-  .dot {
-    width: 10px; height: 10px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-  .section-header h2 {
-    font-family: var(--mono);
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--text);
-  }
-  .section-header .desc {
-    font-size: 0.75rem;
-    color: var(--muted);
-    margin-left: auto;
-  }
+| Kommando | Beskrivelse |
+|---|---|
+| `dbt run -s staging intermediate` | Mellomrom = union (kjør begge) |
+| `dbt run -s +mart_customer_360 --exclude staging` | Ekskluder en gruppe fra et bredere utvalg |
+| `dbt run -s source:crm+` | Alt nedstrøms fra en bestemt source |
 
-  .section-body { padding: 0.75rem 1rem; }
+> `--select` / `-s` fungerer likt på tvers av `dbt run`, `dbt test`, `dbt build` og `dbt compile`.
 
-  .cmd-group { margin-bottom: 1rem; }
-  .cmd-group:last-child { margin-bottom: 0; }
+## Sources
 
-  .cmd-group-label {
-    font-size: 0.68rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--muted);
-    margin-bottom: 0.4rem;
-    padding-bottom: 0.3rem;
-    border-bottom: 1px solid var(--border);
-  }
+### Freshness
 
-  .cmd {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: 0.4rem 1rem;
-    align-items: start;
-    padding: 0.3rem 0;
-    border-bottom: 1px solid rgba(255,255,255,0.03);
-  }
-  .cmd:last-child { border-bottom: none; }
+| Kommando | Beskrivelse |
+|---|---|
+| `dbt source freshness` | Sjekk freshness på alle registrerte kilder |
+| `dbt source freshness -s source:crm` | Freshness kun for én source-gruppe |
+| `dbt source freshness -o freshness.json` | Skriv resultatet til fil |
 
-  code {
-    font-family: var(--mono);
-    font-size: 0.78rem;
-    background: var(--code-bg);
-    padding: 0.15rem 0.4rem;
-    border-radius: 4px;
-    color: var(--text);
-    display: inline-block;
-    line-height: 1.6;
-  }
+### Grafsyntaks for sources
 
-  .cmd code { display: block; white-space: pre; }
+| Kommando | Beskrivelse |
+|---|---|
+| `dbt run -s source:billing` | Modeller direkte avhengig av source-gruppen |
+| `dbt run -s source:billing+` | Alle nedstrøms-modeller fra source |
+| `dbt run -s source:billing.billing_invoices+` | Nedstrøms fra én spesifikk kildetabell |
 
-  .cmd-note {
-    font-size: 0.78rem;
-    color: var(--muted);
-    line-height: 1.5;
-    padding-top: 0.15rem;
-  }
+### Referanseformat i SQL
 
-  .flag { color: var(--accent1); }
-  .kw   { color: var(--accent2); }
-  .str  { color: var(--accent3); }
-  .cmt  { color: var(--accent5); }
+| Syntaks | Beskrivelse |
+|---|---|
+| `` {{ source('crm', 'crm_customers') }} `` | Referer til en kildetabell — brukes kun i staging |
+| `` {{ ref('stg_crm__customers') }} `` | Referer til en annen dbt-modell |
+| `` {{ ref('other_project', 'mart_customers') }} `` | Cross-project ref |
 
-  .tag {
-    display: inline-block;
-    font-family: var(--mono);
-    font-size: 0.65rem;
-    font-weight: 700;
-    padding: 0.1rem 0.45rem;
-    border-radius: 3px;
-    letter-spacing: 0.04em;
-    margin-right: 0.3rem;
-    vertical-align: 1px;
-  }
-  .tag-select { background: var(--accent1); color: var(--tag-text); }
-  .tag-source { background: var(--accent2); color: var(--tag-text); }
-  .tag-test   { background: var(--accent3); color: var(--tag-text); }
-  .tag-docs   { background: var(--accent4); color: var(--tag-text); }
+> `ref()` og `source()` bygger linjeavstamningsgrafen dbt bruker til `--select`, docs og CI. Hardkodede tabellnavn bryter grafen.
 
-  .note-box {
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--accent1);
-    border-radius: 4px;
-    padding: 0.5rem 0.75rem;
-    margin-top: 0.75rem;
-    font-size: 0.78rem;
-    color: var(--muted);
-    line-height: 1.6;
-  }
-  .note-box code { font-size: 0.75rem; }
+## Testing
 
-  .inline-flags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-    margin-top: 0.5rem;
-  }
-  .flag-pill {
-    background: var(--code-bg);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 0.2rem 0.5rem;
-    font-family: var(--mono);
-    font-size: 0.72rem;
-    color: var(--accent1);
-    line-height: 1.5;
-  }
-  .flag-pill span {
-    color: var(--muted);
-    font-family: var(--sans);
-    font-size: 0.7rem;
-    margin-left: 0.3rem;
-  }
+### Kjøre tester
 
-  @media (max-width: 800px) {
-    .grid { grid-template-columns: 1fr; }
-    .section.full-width { grid-column: auto; }
-    body { padding: 1rem; }
-  }
+| Kommando | Beskrivelse |
+|---|---|
+| `dbt test` | Kjør alle tester i prosjektet |
+| `dbt test -s stg_crm__customers` | Tester for én modell |
+| `dbt test -s staging` | Alle tester i en mappe |
+| `dbt test -s source:crm` | Tester (inkl. freshness) for en source |
+| `dbt test --store-failures` | Skriv feilende rader til tabeller i DB |
+| `dbt build` | Kjør run + test + seed i rekkefølge |
+| `dbt build -s +mart_customer_360` | Build hele grafen med tester underveis |
 
-  @media print {
-    body { background: white; color: #111; padding: 1rem; }
-    :root {
-      --bg: white; --bg2: #f7f7f9; --bg3: #f0f0f4;
-      --border: #ddd; --text: #111; --muted: #666;
-      --code-bg: #f0f0f4;
-    }
-    .grid { grid-template-columns: repeat(2, 1fr); }
-    .section.full-width { grid-column: 1 / -1; }
-  }
-</style>
+### Innebygde generiske tester
 
-<div v-pre>
+| Test | Sjekker |
+|---|---|
+| `not_null` | Ingen null-verdier i kolonnen |
+| `unique` | Alle verdier er unike |
+| `accepted_values` | Verdier finnes i en definert liste |
+| `relationships` | Fremmednøkkel finnes i en annen modell |
 
-<header class="page-header">
-  <h1>dbt cheat sheet</h1>
-  <span class="subtitle">Vanlige kommandoer og flagg</span>
-</header>
+```yaml
+- name: customer_id
+  tests:
+    - not_null
+    - unique
+- name: status
+  tests:
+    - accepted_values:
+        values: ['active', 'churned', 'suspended']
+        # quote: false → sammenlign uten quotes
+- name: contract_id
+  tests:
+    - relationships:
+        to: ref('stg_crm__customers')
+        field: customer_id   # PK i den andre modellen
+```
 
-<div class="grid">
+## Dokumentasjon
 
-  <!-- SELECT SYNTAX -->
-  <div class="section full-width">
-    <div class="section-header">
-      <div class="dot" style="background: var(--accent1)"></div>
-      <h2>Select-syntax</h2>
-      <span class="desc">kan kombineres i de fleste kontekster</span>
-    </div>
-    <div class="section-body">
+| Kommando | Beskrivelse |
+|---|---|
+| `dbt docs generate` | Bygg dokumentasjonssiden fra YAML og skjema |
+| `dbt docs serve` | Åpne dokumentasjonssiden i nettleseren |
+| `dbt compile` | Valider at alle modeller kompilerer uten å kjøre dem |
+| `dbt parse` | Les og valider hele prosjektet (raskere enn compile) |
 
-      <div class="cmd-group">
-        <div class="cmd-group-label">Velg modeller</div>
+### Doc-blokker
 
-        <div class="cmd">
-          <code>dbt run</code>
-          <span class="cmd-note">Kjør alle modeller i prosjektet</span>
-        </div>
-        <div class="cmd">
-          <code>dbt run <span class="flag">--select</span> <span class="str">stg_crm__customers</span></code>
-          <span class="cmd-note">Kjør én spesifikk modell</span>
-        </div>
-        <div class="cmd">
-          <code>dbt run <span class="flag">--select</span> <span class="str">staging</span></code>
-          <span class="cmd-note">Kjør alle modeller i en mappe</span>
-        </div>
-        <div class="cmd">
-          <code>dbt run <span class="flag">--select</span> <span class="str">tag:daily</span></code>
-          <span class="cmd-note">Velg modeller med et bestemt tag</span>
-        </div>
-      </div>
+```jinja
+{%- docs customer_id %}
+Unik kundeidentifikator. Primærnøkkel.
+{% enddocs %}
+```
 
-      <div class="cmd-group">
-        <div class="cmd-group-label">Grafsyntaks — avhengigheter</div>
+```yaml
+description: '{% raw %}{{ doc("customer_id") }}{% endraw %}'
+```
 
-        <div class="cmd">
-          <code>dbt run <span class="flag">--select</span> <span class="str">+mart_customer_360</span></code>
-          <span class="cmd-note">Modellen og alle oppstrøms-avhengigheter</span>
-        </div>
-        <div class="cmd">
-          <code>dbt run <span class="flag">--select</span> <span class="str">mart_customer_360+</span></code>
-          <span class="cmd-note">Modellen og alle nedstrøms-avhengigheter</span>
-        </div>
-        <div class="cmd">
-          <code>dbt run <span class="flag">--select</span> <span class="str">+mart_customer_360+</span></code>
-          <span class="cmd-note">Hele grafen i begge retninger</span>
-        </div>
-        <div class="cmd">
-          <code>dbt run <span class="flag">--select</span> <span class="str">1+stg_crm__customers</span></code>
-          <span class="cmd-note">Maks 1 nivå oppstrøms</span>
-        </div>
-        <div class="cmd">
-          <code>dbt run <span class="flag">--select</span> <span class="str">stg_crm__customers+1</span></code>
-          <span class="cmd-note">Maks 1 nivå nedstrøms</span>
-        </div>
-      </div>
+## Nyttige flagg
 
-      <div class="cmd-group">
-        <div class="cmd-group-label">Kombinere og ekskludere</div>
-
-        <div class="cmd">
-          <code>dbt run <span class="flag">--select</span> <span class="str">staging intermediate</span></code>
-          <span class="cmd-note">Mellomrom = union (begge)</span>
-        </div>
-        <div class="cmd">
-          <code>dbt run <span class="flag">--select</span> <span class="str">+mart_customer_360</span> <span class="flag">--exclude</span> <span class="str">staging</span></code>
-          <span class="cmd-note">Ekskluder en gruppe fra et bredere utvalg</span>
-        </div>
-        <div class="cmd">
-          <code>dbt run <span class="flag">--select</span> <span class="str">source:crm+</span></code>
-          <span class="cmd-note">Alt nedstrøms fra en bestemt source</span>
-        </div>
-      </div>
-
-      <div class="note-box">
-        <code>--select</code> / <code>-s</code> fungerer likt på tvers av <code>dbt run</code>, <code>dbt test</code>, <code>dbt build</code> og <code>dbt compile</code> — velger alltid samme sett med noder.
-      </div>
-
-    </div>
-  </div>
-
-  <!-- SOURCES -->
-  <div class="section">
-    <div class="section-header">
-      <div class="dot" style="background: var(--accent2)"></div>
-      <h2>Sources</h2>
-    </div>
-    <div class="section-body">
-
-      <div class="cmd-group">
-        <div class="cmd-group-label">Grunnleggende</div>
-        <div class="cmd">
-          <code>dbt source freshness</code>
-          <span class="cmd-note">Sjekk freshness på alle registrerte kilder</span>
-        </div>
-        <div class="cmd">
-          <code>dbt source freshness <span class="flag">--select</span> <span class="str">source:crm</span></code>
-          <span class="cmd-note">Freshness kun for én source-gruppe</span>
-        </div>
-        <div class="cmd">
-          <code>dbt source freshness <span class="flag">-o</span> <span class="str">freshness.json</span></code>
-          <span class="cmd-note">Skriv resultatet til fil</span>
-        </div>
-      </div>
-
-      <div class="cmd-group">
-        <div class="cmd-group-label">Grafsyntaks for sources</div>
-        <div class="cmd">
-          <code>dbt run <span class="flag">-s</span> <span class="str">source:billing</span></code>
-          <span class="cmd-note">Direkte avhengig av en source-gruppe</span>
-        </div>
-        <div class="cmd">
-          <code>dbt run <span class="flag">-s</span> <span class="str">source:billing+</span></code>
-          <span class="cmd-note">Alle nedstrøms-modeller fra source</span>
-        </div>
-        <div class="cmd">
-          <code>dbt run <span class="flag">-s</span> <span class="str">source:billing.billing_invoices+</span></code>
-          <span class="cmd-note">Nedstrøms fra én spesifikk kildetabell</span>
-        </div>
-      </div>
-
-      <div class="cmd-group">
-        <div class="cmd-group-label">I SQL — referanseformat</div>
-        <div class="cmd">
-          <code><span class="kw">{{ source(</span><span class="str">'crm'</span>, <span class="str">'crm_customers'</span><span class="kw">) }}</span></code>
-          <span class="cmd-note">Referer til en kildetabell. Brukes kun i staging-modeller.</span>
-        </div>
-        <div class="cmd">
-          <code><span class="kw">{{ ref(</span><span class="str">'stg_crm__customers'</span><span class="kw">) }}</span></code>
-          <span class="cmd-note">Referer til en annen dbt-modell. Brukes overalt unntatt mot kilden.</span>
-        </div>
-        <div class="cmd">
-          <code><span class="kw">{{ ref(</span><span class="str">'other_project'</span>, <span class="str">'mart_customers'</span><span class="kw">) }}</span></code>
-          <span class="cmd-note">Cross-project ref — referer til modell i et annet dbt-prosjekt.</span>
-        </div>
-      </div>
-
-      <div class="note-box">
-        <code>ref()</code> og <code>source()</code> er ikke bare referanser — de bygger linjeavstamningsgrafen som dbt bruker til <code>--select</code>-syntaks, docs og CI. Hardkodede tabellnavn bryter grafen.
-      </div>
-
-    </div>
-  </div>
-
-  <!-- TESTING -->
-  <div class="section">
-    <div class="section-header">
-      <div class="dot" style="background: var(--accent3)"></div>
-      <h2>Testing</h2>
-    </div>
-    <div class="section-body">
-
-      <div class="cmd-group">
-        <div class="cmd-group-label">Kjøre tester</div>
-        <div class="cmd">
-          <code>dbt test</code>
-          <span class="cmd-note">Kjør alle tester i prosjektet</span>
-        </div>
-        <div class="cmd">
-          <code>dbt test <span class="flag">-s</span> <span class="str">stg_crm__customers</span></code>
-          <span class="cmd-note">Tester for én modell</span>
-        </div>
-        <div class="cmd">
-          <code>dbt test <span class="flag">-s</span> <span class="str">staging</span></code>
-          <span class="cmd-note">Alle tester i en mappe</span>
-        </div>
-        <div class="cmd">
-          <code>dbt test <span class="flag">-s</span> <span class="str">source:crm</span></code>
-          <span class="cmd-note">Tester (inkl. freshness) for en source</span>
-        </div>
-        <div class="cmd">
-          <code>dbt test <span class="flag">--store-failures</span></code>
-          <span class="cmd-note">Skriv feilende rader til tabeller i DB</span>
-        </div>
-      </div>
-
-      <div class="cmd-group">
-        <div class="cmd-group-label">Innebygde tester — full YAML-syntaks</div>
-        <div class="cmd">
-          <code><span class="kw">- not_null</span></code>
-          <span class="cmd-note">Ingen null-verdier i kolonnen</span>
-        </div>
-        <div class="cmd">
-          <code><span class="kw">- unique</span></code>
-          <span class="cmd-note">Alle verdier er unike</span>
-        </div>
-        <div class="cmd">
-          <code><span class="kw">- accepted_values</span>:
-    <span class="flag">values</span>: [<span class="str">'active'</span>, <span class="str">'churned'</span>,
-             <span class="str">'suspended'</span>]
-    <span class="cmt"># quote: false  → sammenlign uten quotes</span></code>
-          <span class="cmd-note">Verdier må finnes i listen. Feiler på alt som ikke er listet — husk å inkludere alle gyldige statuser.</span>
-        </div>
-        <div class="cmd">
-          <code><span class="kw">- relationships</span>:
-    <span class="flag">to</span>: <span class="str">ref('stg_crm__customers')</span>
-    <span class="flag">field</span>: <span class="str">customer_id</span>
-    <span class="cmt"># field = PK i den andre modellen</span></code>
-          <span class="cmd-note">Hver verdi i kolonnen må finnes som <code>customer_id</code> i <code>stg_crm__customers</code>. Brukes på fremmednøkler. Null-verdier hoppes over som standard.</span>
-        </div>
-      </div>
-
-      <div class="cmd-group">
-        <div class="cmd-group-label">Kombinere med build</div>
-        <div class="cmd">
-          <code>dbt build</code>
-          <span class="cmd-note">Kjør run + test + seed + snapshot i rekkefølge</span>
-        </div>
-        <div class="cmd">
-          <code>dbt build <span class="flag">-s</span> <span class="str">+mart_customer_360</span></code>
-          <span class="cmd-note">Build hele grafen med tester underveis</span>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- DOCUMENTATION -->
-  <div class="section">
-    <div class="section-header">
-      <div class="dot" style="background: var(--accent4)"></div>
-      <h2>Dokumentasjon</h2>
-    </div>
-    <div class="section-body">
-
-      <div class="cmd-group">
-        <div class="cmd-group-label">Generer og vis</div>
-        <div class="cmd">
-          <code>dbt docs generate</code>
-          <span class="cmd-note">Bygg dokumentasjonssiden fra YAML og skjema</span>
-        </div>
-        <div class="cmd">
-          <code>dbt docs serve</code>
-          <span class="cmd-note">Åpne dokumentasjonssiden i nettleseren</span>
-        </div>
-      </div>
-
-      <div class="cmd-group">
-        <div class="cmd-group-label">Sjekk dekning</div>
-        <div class="cmd">
-          <code>dbt compile</code>
-          <span class="cmd-note">Valider at alle modeller kompilerer uten å kjøre dem</span>
-        </div>
-        <div class="cmd">
-          <code>dbt parse</code>
-          <span class="cmd-note">Les og valider hele prosjektet (raskere enn compile)</span>
-        </div>
-      </div>
-
-      <div class="cmd-group">
-        <div class="cmd-group-label">Doc-blokker i markdown</div>
-        <div class="cmd">
-          <code><span class="kw">{% docs</span> <span class="str">customer_id</span> <span class="kw">%}</span><br>...<span class="kw">{% enddocs %}</span></code>
-          <span class="cmd-note">Definer gjenbrukbar beskrivelse i en .md-fil</span>
-        </div>
-        <div class="cmd">
-          <code>description: <span class="str">'{{ doc("customer_id") }}'</span></code>
-          <span class="cmd-note">Bruk doc-blokken i YAML</span>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- NYTTIGE FLAGG -->
-  <div class="section full-width">
-    <div class="section-header">
-      <div class="dot" style="background: var(--muted)"></div>
-      <h2>Nyttige flagg</h2>
-      <span class="desc">fungerer på de fleste kommandoer</span>
-    </div>
-    <div class="section-body">
-      <div class="inline-flags">
-        <div class="flag-pill"><code>--select / -s</code><span>velg noder</span></div>
-        <div class="flag-pill"><code>--exclude</code><span>ekskluder noder</span></div>
-        <div class="flag-pill"><code>--target / -t</code><span>bytt miljø (dev/prod)</span></div>
-        <div class="flag-pill"><code>--profiles-dir</code><span>angi profiles.yml-sti</span></div>
-        <div class="flag-pill"><code>--vars</code><span>send variabler inn i run</span></div>
-        <div class="flag-pill"><code>--full-refresh</code><span>tving rebuilding av inkrementelle modeller</span></div>
-        <div class="flag-pill"><code>--store-failures</code><span>lagre feilrader i DB</span></div>
-        <div class="flag-pill"><code>--no-partial-parse</code><span>tving full parsing av prosjektet</span></div>
-        <div class="flag-pill"><code>--threads N</code><span>antall parallelle tråder</span></div>
-        <div class="flag-pill"><code>--warn-error</code><span>gjør advarsler til feil</span></div>
-        <div class="flag-pill"><code>--defer</code><span>bruk prod-manifestet for ikke-valgte noder</span></div>
-        <div class="flag-pill"><code>--favor-state</code><span>bruk prod-artefakter der det er mulig</span></div>
-      </div>
-    </div>
-  </div>
-
-</div>
-
-</div>
+| Flagg | Beskrivelse |
+|---|---|
+| `--select` / `-s` | Velg noder |
+| `--exclude` | Ekskluder noder |
+| `--target` / `-t` | Bytt miljø (dev/prod) |
+| `--profiles-dir` | Angi profiles.yml-sti |
+| `--vars` | Send variabler inn i run |
+| `--full-refresh` | Tving rebuilding av inkrementelle modeller |
+| `--store-failures` | Lagre feilrader i DB |
+| `--no-partial-parse` | Tving full parsing av prosjektet |
+| `--threads N` | Antall parallelle tråder |
+| `--warn-error` | Gjør advarsler til feil |
+| `--defer` | Bruk prod-manifestet for ikke-valgte noder |
+| `--favor-state` | Bruk prod-artefakter der det er mulig |

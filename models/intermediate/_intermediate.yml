@@ -13,7 +13,7 @@ models:
     columns:
       - name: customer_id
         description: Primary key. Inherited from stg__crm_customers.
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: full_name

@@ -64,7 +64,7 @@ export default defineConfig({
         ],
       },
       { text: 'Makroer', link: '/makroer/' },
-      { text: 'Cheat sheet', link: '/cheatsheet.html' },
+      { text: 'Cheat sheet', link: '/cheatsheet' },
     ],
 
     sidebar: [

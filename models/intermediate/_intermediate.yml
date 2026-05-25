@@ -48,6 +48,11 @@ models:
     config:
       tags:
         - billing
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - invoice_id
+            - customer_id
     columns:
       - name: invoice_id
         description: Primary key. Inherited from stg__billing_invoices.

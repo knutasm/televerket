@@ -19,10 +19,10 @@ select
     a.activation_id,
     a.msisdn,
     a.activated_at,
-    a.device_info::json ->> 'make' as device_make,
-    a.device_info::json ->> 'model' as device_model,
-    lower(a.device_info::json ->> 'os') as device_os,
-    a.device_info::json ->> 'imei' as device_imei
+    {{ json_extract('a.device_info', 'make') }}              as device_make,
+    {{ json_extract('a.device_info', 'model') }}             as device_model,
+    lower({{ json_extract('a.device_info', 'os') }})         as device_os,
+    {{ json_extract('a.device_info', 'imei') }}              as device_imei
 from customers as c
 left join latest_activations as a
     on c.customer_id = a.customer_id

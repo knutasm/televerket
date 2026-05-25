@@ -1,0 +1,242 @@
+2026-05-25 21:45:08 — INFO — Running with edr=0.23.4
+2026-05-25 21:45:09 — DEBUG — profiles.yml not found at /home/knutasm/repos/televerket/profiles.yml
+2026-05-25 21:45:09 — DEBUG — profiles.yml not found at /home/knutasm/repos/televerket/profiles.yml
+2026-05-25 21:45:09 — INFO — Installing packages for edr internal dbt package...
+2026-05-25 21:45:09 — INFO — Running dbt command --log-format json deps --project-dir /home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/dbt_project --profiles-dir /home/knutasm/repos/televerket
+2026-05-25 21:45:10 — DEBUG — Running dbt command --log-format json run-operation elementary.log_macro_results --args {"macro_name": "elementary_cli.get_latest_invocation", "macro_args": {}} --project-dir /home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/dbt_project --profiles-dir /home/knutasm/repos/televerket
+[31;20m2026-05-25 21:45:11 — ERROR — Unable to get the latest invocation: Failed to run dbt command.
+Runtime Error
+  Could not find profile named 'elementary'[0m
+2026-05-25 21:45:11 — DEBUG — Running dbt command --log-format json run-operation elementary.log_macro_results --args {"macro_name": "elementary_cli.get_adapter_type_and_unique_id", "macro_args": {}} --project-dir /home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/dbt_project --profiles-dir /home/knutasm/repos/televerket
+2026-05-25 21:45:11 — DEBUG — Could not get warehouse info.
+Traceback (most recent call last):
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/data_monitoring/data_monitoring.py", line 142, in _get_warehouse_info
+    self.internal_dbt_runner.run_operation(
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/clients/dbt/command_line_dbt_runner.py", line 351, in run_operation
+    result = self._run_command(
+             ^^^^^^^^^^^^^^^^^^
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/clients/dbt/command_line_dbt_runner.py", line 209, in _run_command
+    return self._inner_run_command_with_retries(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/tenacity/__init__.py", line 331, in wrapped_f
+    return copy(f, *args, **kw)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/tenacity/__init__.py", line 470, in __call__
+    do = self.iter(retry_state=retry_state)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/tenacity/__init__.py", line 371, in iter
+    result = action(retry_state)
+             ^^^^^^^^^^^^^^^^^^^
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/tenacity/__init__.py", line 393, in <lambda>
+    self._add_action_func(lambda rs: rs.outcome.result())
+                                     ^^^^^^^^^^^^^^^^^^^
+  File "/home/knutasm/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/knutasm/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/tenacity/__init__.py", line 473, in __call__
+    result = fn(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/clients/dbt/command_line_dbt_runner.py", line 246, in _inner_run_command_with_retries
+    result = self._inner_run_command(
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/clients/dbt/api_dbt_runner.py", line 59, in _inner_run_command
+    raise DbtCommandError(
+elementary.exceptions.exceptions.DbtCommandError: Failed to run dbt command.
+Runtime Error
+  Could not find profile named 'elementary'
+2026-05-25 21:45:11 — DEBUG — Running dbt command --log-format json run-operation elementary.log_macro_results --args {"macro_name": "elementary_cli.get_elementary_database_and_schema", "macro_args": {}} --project-dir /home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/dbt_project --profiles-dir /home/knutasm/repos/televerket
+[31;20m2026-05-25 21:45:12 — ERROR — Failed to parse Elementary's database and schema.[0m
+2026-05-25 21:45:12 — INFO — Running dbt command --log-format json run-operation elementary.log_macro_results --args {"macro_name": "elementary_cli.get_test_results", "macro_args": {"days_back": 7, "invocations_per_test": 720, "disable_passed_test_metrics": false}} --project-dir /home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/dbt_project --profiles-dir /home/knutasm/repos/televerket
+[31;20m2026-05-25 21:45:12 — ERROR — Could not generate the report - Error: Failed to run dbt command.
+Runtime Error
+  Could not find profile named 'elementary'
+Please reach out to our community for help with this issue.[0m
+Traceback (most recent call last):
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/api/report/report.py", line 84, in get_report_data
+    tests_api = TestsAPI(
+                ^^^^^^^^^
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/api/tests/tests.py", line 52, in __init__
+    self.test_results_db_rows = self._get_test_results_db_rows(
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/api/tests/tests.py", line 64, in _get_test_results_db_rows
+    return self.tests_fetcher.get_all_test_results_db_rows(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/fetchers/tests/tests.py", line 26, in get_all_test_results_db_rows
+    run_operation_response = self.dbt_runner.run_operation(
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/clients/dbt/command_line_dbt_runner.py", line 351, in run_operation
+    result = self._run_command(
+             ^^^^^^^^^^^^^^^^^^
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/clients/dbt/command_line_dbt_runner.py", line 209, in _run_command
+    return self._inner_run_command_with_retries(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/tenacity/__init__.py", line 331, in wrapped_f
+    return copy(f, *args, **kw)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/tenacity/__init__.py", line 470, in __call__
+    do = self.iter(retry_state=retry_state)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/tenacity/__init__.py", line 371, in iter
+    result = action(retry_state)
+             ^^^^^^^^^^^^^^^^^^^
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/tenacity/__init__.py", line 393, in <lambda>
+    self._add_action_func(lambda rs: rs.outcome.result())
+                                     ^^^^^^^^^^^^^^^^^^^
+  File "/home/knutasm/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/knutasm/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/tenacity/__init__.py", line 473, in __call__
+    result = fn(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/clients/dbt/command_line_dbt_runner.py", line 246, in _inner_run_command_with_retries
+    result = self._inner_run_command(
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/clients/dbt/api_dbt_runner.py", line 59, in _inner_run_command
+    raise DbtCommandError(
+elementary.exceptions.exceptions.DbtCommandError: Failed to run dbt command.
+Runtime Error
+  Could not find profile named 'elementary'
+2026-05-25 21:45:22 — INFO — Running with edr=0.23.4
+2026-05-25 21:47:19 — INFO — Running with edr=0.23.4
+2026-05-25 21:47:20 — DEBUG — profiles.yml not found at /home/knutasm/repos/televerket/profiles.yml
+2026-05-25 21:47:20 — DEBUG — profiles.yml not found at /home/knutasm/repos/televerket/profiles.yml
+2026-05-25 21:47:20 — DEBUG — Running dbt command --log-format json run-operation elementary.log_macro_results --args {"macro_name": "elementary_cli.get_latest_invocation", "macro_args": {}} --project-dir /home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/dbt_project --profiles-dir /home/knutasm/repos/televerket --target default
+[31;20m2026-05-25 21:47:20 — ERROR — Unable to get the latest invocation: Failed to run dbt command.
+Runtime Error
+  Could not find profile named 'elementary'[0m
+2026-05-25 21:47:20 — DEBUG — Running dbt command --log-format json run-operation elementary.log_macro_results --args {"macro_name": "elementary_cli.get_adapter_type_and_unique_id", "macro_args": {}} --project-dir /home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/dbt_project --profiles-dir /home/knutasm/repos/televerket --target default
+2026-05-25 21:47:21 — DEBUG — Could not get warehouse info.
+Traceback (most recent call last):
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/data_monitoring/data_monitoring.py", line 142, in _get_warehouse_info
+    self.internal_dbt_runner.run_operation(
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/clients/dbt/command_line_dbt_runner.py", line 351, in run_operation
+    result = self._run_command(
+             ^^^^^^^^^^^^^^^^^^
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/clients/dbt/command_line_dbt_runner.py", line 209, in _run_command
+    return self._inner_run_command_with_retries(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/tenacity/__init__.py", line 331, in wrapped_f
+    return copy(f, *args, **kw)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/tenacity/__init__.py", line 470, in __call__
+    do = self.iter(retry_state=retry_state)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/tenacity/__init__.py", line 371, in iter
+    result = action(retry_state)
+             ^^^^^^^^^^^^^^^^^^^
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/tenacity/__init__.py", line 393, in <lambda>
+    self._add_action_func(lambda rs: rs.outcome.result())
+                                     ^^^^^^^^^^^^^^^^^^^
+  File "/home/knutasm/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/knutasm/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/tenacity/__init__.py", line 473, in __call__
+    result = fn(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/clients/dbt/command_line_dbt_runner.py", line 246, in _inner_run_command_with_retries
+    result = self._inner_run_command(
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/clients/dbt/api_dbt_runner.py", line 59, in _inner_run_command
+    raise DbtCommandError(
+elementary.exceptions.exceptions.DbtCommandError: Failed to run dbt command.
+Runtime Error
+  Could not find profile named 'elementary'
+2026-05-25 21:47:21 — DEBUG — Running dbt command --log-format json run-operation elementary.log_macro_results --args {"macro_name": "elementary_cli.get_elementary_database_and_schema", "macro_args": {}} --project-dir /home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/dbt_project --profiles-dir /home/knutasm/repos/televerket --target default
+[31;20m2026-05-25 21:47:21 — ERROR — Failed to parse Elementary's database and schema.[0m
+2026-05-25 21:47:21 — INFO — Running dbt command --log-format json run-operation elementary.log_macro_results --args {"macro_name": "elementary_cli.get_test_results", "macro_args": {"days_back": 7, "invocations_per_test": 720, "disable_passed_test_metrics": false}} --project-dir /home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/dbt_project --profiles-dir /home/knutasm/repos/televerket --target default
+[31;20m2026-05-25 21:47:22 — ERROR — Could not generate the report - Error: Failed to run dbt command.
+Runtime Error
+  Could not find profile named 'elementary'
+Please reach out to our community for help with this issue.[0m
+Traceback (most recent call last):
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/api/report/report.py", line 84, in get_report_data
+    tests_api = TestsAPI(
+                ^^^^^^^^^
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/api/tests/tests.py", line 52, in __init__
+    self.test_results_db_rows = self._get_test_results_db_rows(
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/api/tests/tests.py", line 64, in _get_test_results_db_rows
+    return self.tests_fetcher.get_all_test_results_db_rows(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/fetchers/tests/tests.py", line 26, in get_all_test_results_db_rows
+    run_operation_response = self.dbt_runner.run_operation(
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/clients/dbt/command_line_dbt_runner.py", line 351, in run_operation
+    result = self._run_command(
+             ^^^^^^^^^^^^^^^^^^
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/clients/dbt/command_line_dbt_runner.py", line 209, in _run_command
+    return self._inner_run_command_with_retries(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/tenacity/__init__.py", line 331, in wrapped_f
+    return copy(f, *args, **kw)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/tenacity/__init__.py", line 470, in __call__
+    do = self.iter(retry_state=retry_state)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/tenacity/__init__.py", line 371, in iter
+    result = action(retry_state)
+             ^^^^^^^^^^^^^^^^^^^
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/tenacity/__init__.py", line 393, in <lambda>
+    self._add_action_func(lambda rs: rs.outcome.result())
+                                     ^^^^^^^^^^^^^^^^^^^
+  File "/home/knutasm/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/knutasm/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/tenacity/__init__.py", line 473, in __call__
+    result = fn(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/clients/dbt/command_line_dbt_runner.py", line 246, in _inner_run_command_with_retries
+    result = self._inner_run_command(
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/clients/dbt/api_dbt_runner.py", line 59, in _inner_run_command
+    raise DbtCommandError(
+elementary.exceptions.exceptions.DbtCommandError: Failed to run dbt command.
+Runtime Error
+  Could not find profile named 'elementary'
+2026-05-25 21:48:11 — INFO — Running with edr=0.23.4
+2026-05-25 21:48:11 — DEBUG — Resolved adapter type 'duckdb' for target 'dev'
+2026-05-25 21:48:11 — DEBUG — Resolved adapter type 'duckdb' for target 'dev'
+2026-05-25 21:48:11 — DEBUG — Running dbt command --log-format json run-operation elementary.log_macro_results --args {"macro_name": "elementary_cli.get_latest_invocation", "macro_args": {}} --project-dir /home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/dbt_project --profiles-dir /home/knutasm/.dbt --target dev
+2026-05-25 21:48:16 — DEBUG — Result bytes size for command '--log-format json run-operation elementary.log_macro_results --args {"macro_name": "elementary_cli.get_latest_invocation", "macro_args": {}} --project-dir /home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/dbt_project --profiles-dir /home/knutasm/.dbt --target dev' is 2534
+2026-05-25 21:48:16 — DEBUG — Running dbt command --log-format json run-operation elementary.log_macro_results --args {"macro_name": "elementary_cli.get_adapter_type_and_unique_id", "macro_args": {}} --project-dir /home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/dbt_project --profiles-dir /home/knutasm/.dbt --target dev
+2026-05-25 21:48:17 — DEBUG — Result bytes size for command '--log-format json run-operation elementary.log_macro_results --args {"macro_name": "elementary_cli.get_adapter_type_and_unique_id", "macro_args": {}} --project-dir /home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/dbt_project --profiles-dir /home/knutasm/.dbt --target dev' is 530
+2026-05-25 21:48:17 — INFO — edr (0.23.4) and Elementary's dbt package (0.23.1) are compatible.
+2026-05-25 21:48:17 — DEBUG — Running dbt command --log-format json run-operation elementary.log_macro_results --args {"macro_name": "elementary_cli.get_elementary_database_and_schema", "macro_args": {}} --project-dir /home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/dbt_project --profiles-dir /home/knutasm/.dbt --target dev
+2026-05-25 21:48:17 — DEBUG — Result bytes size for command '--log-format json run-operation elementary.log_macro_results --args {"macro_name": "elementary_cli.get_elementary_database_and_schema", "macro_args": {}} --project-dir /home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/dbt_project --profiles-dir /home/knutasm/.dbt --target dev' is 436
+2026-05-25 21:48:17 — INFO — Elementary's database and schema: 'televerket.main'
+2026-05-25 21:48:17 — INFO — Running dbt command --log-format json run-operation elementary.log_macro_results --args {"macro_name": "elementary_cli.get_test_results", "macro_args": {"days_back": 7, "invocations_per_test": 720, "disable_passed_test_metrics": false}} --project-dir /home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/dbt_project --profiles-dir /home/knutasm/.dbt --target dev
+2026-05-25 21:48:18 — DEBUG — Result bytes size for command '--log-format json run-operation elementary.log_macro_results --args {"macro_name": "elementary_cli.get_test_results", "macro_args": {"days_back": 7, "invocations_per_test": 720, "disable_passed_test_metrics": false}} --project-dir /home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/dbt_project --profiles-dir /home/knutasm/.dbt --target dev' is 285310
+2026-05-25 21:48:18 — INFO — Running dbt command --log-format json run-operation elementary.log_macro_results --args {"macro_name": "elementary_cli.get_source_freshness_results", "macro_args": {"days_back": 7, "invocations_per_test": 720}} --project-dir /home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/dbt_project --profiles-dir /home/knutasm/.dbt --target dev
+2026-05-25 21:48:19 — DEBUG — Result bytes size for command '--log-format json run-operation elementary.log_macro_results --args {"macro_name": "elementary_cli.get_source_freshness_results", "macro_args": {"days_back": 7, "invocations_per_test": 720}} --project-dir /home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/dbt_project --profiles-dir /home/knutasm/.dbt --target dev' is 402
+2026-05-25 21:48:19 — INFO — Running dbt command --log-format json run-operation elementary.log_macro_results --args {"macro_name": "elementary_cli.get_seeds", "macro_args": {}} --project-dir /home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/dbt_project --profiles-dir /home/knutasm/.dbt --target dev
+2026-05-25 21:48:20 — DEBUG — Result bytes size for command '--log-format json run-operation elementary.log_macro_results --args {"macro_name": "elementary_cli.get_seeds", "macro_args": {}} --project-dir /home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/dbt_project --profiles-dir /home/knutasm/.dbt --target dev' is 402
+2026-05-25 21:48:20 — INFO — Running dbt command --log-format json run-operation elementary.log_macro_results --args {"macro_name": "elementary_cli.get_snapshots", "macro_args": {}} --project-dir /home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/dbt_project --profiles-dir /home/knutasm/.dbt --target dev
+2026-05-25 21:48:20 — DEBUG — Result bytes size for command '--log-format json run-operation elementary.log_macro_results --args {"macro_name": "elementary_cli.get_snapshots", "macro_args": {}} --project-dir /home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/dbt_project --profiles-dir /home/knutasm/.dbt --target dev' is 402
+2026-05-25 21:48:20 — INFO — Running dbt command --log-format json run-operation elementary.log_macro_results --args {"macro_name": "elementary_cli.get_models", "macro_args": {"exclude_elementary": true}} --project-dir /home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/dbt_project --profiles-dir /home/knutasm/.dbt --target dev
+2026-05-25 21:48:21 — DEBUG — Result bytes size for command '--log-format json run-operation elementary.log_macro_results --args {"macro_name": "elementary_cli.get_models", "macro_args": {"exclude_elementary": true}} --project-dir /home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/dbt_project --profiles-dir /home/knutasm/.dbt --target dev' is 15612
+2026-05-25 21:48:21 — INFO — Running dbt command --log-format json run-operation elementary.log_macro_results --args {"macro_name": "elementary_cli.get_sources", "macro_args": {}} --project-dir /home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/dbt_project --profiles-dir /home/knutasm/.dbt --target dev
+2026-05-25 21:48:22 — DEBUG — Result bytes size for command '--log-format json run-operation elementary.log_macro_results --args {"macro_name": "elementary_cli.get_sources", "macro_args": {}} --project-dir /home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/dbt_project --profiles-dir /home/knutasm/.dbt --target dev' is 5474
+2026-05-25 21:48:22 — INFO — Running dbt command --log-format json run-operation elementary.log_macro_results --args {"macro_name": "elementary_cli.get_exposures", "macro_args": {}} --project-dir /home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/dbt_project --profiles-dir /home/knutasm/.dbt --target dev
+2026-05-25 21:48:23 — DEBUG — Result bytes size for command '--log-format json run-operation elementary.log_macro_results --args {"macro_name": "elementary_cli.get_exposures", "macro_args": {}} --project-dir /home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/dbt_project --profiles-dir /home/knutasm/.dbt --target dev' is 402
+2026-05-25 21:48:23 — INFO — Running dbt command --log-format json run-operation elementary.log_macro_results --args {"macro_name": "elementary_cli.get_singular_tests", "macro_args": {}} --project-dir /home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/dbt_project --profiles-dir /home/knutasm/.dbt --target dev
+2026-05-25 21:48:24 — DEBUG — Result bytes size for command '--log-format json run-operation elementary.log_macro_results --args {"macro_name": "elementary_cli.get_singular_tests", "macro_args": {}} --project-dir /home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/dbt_project --profiles-dir /home/knutasm/.dbt --target dev' is 402
+2026-05-25 21:48:24 — INFO — Running dbt command --log-format json run-operation elementary.log_macro_results --args {"macro_name": "elementary_cli.get_models_runs", "macro_args": {"days_back": 7, "exclude_elementary": true}} --project-dir /home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/dbt_project --profiles-dir /home/knutasm/.dbt --target dev
+2026-05-25 21:48:24 — DEBUG — Result bytes size for command '--log-format json run-operation elementary.log_macro_results --args {"macro_name": "elementary_cli.get_models_runs", "macro_args": {"days_back": 7, "exclude_elementary": true}} --project-dir /home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/dbt_project --profiles-dir /home/knutasm/.dbt --target dev' is 16798
+2026-05-25 21:48:24 — INFO — Running dbt command --log-format json run-operation elementary.log_macro_results --args {"macro_name": "elementary_cli.get_dbt_models_test_coverage", "macro_args": {}} --project-dir /home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/dbt_project --profiles-dir /home/knutasm/.dbt --target dev
+2026-05-25 21:48:25 — DEBUG — Result bytes size for command '--log-format json run-operation elementary.log_macro_results --args {"macro_name": "elementary_cli.get_dbt_models_test_coverage", "macro_args": {}} --project-dir /home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/dbt_project --profiles-dir /home/knutasm/.dbt --target dev' is 2840
+2026-05-25 21:48:25 — INFO — Running dbt command --log-format json run-operation elementary.log_macro_results --args {"macro_name": "elementary_cli.get_tests", "macro_args": {}} --project-dir /home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/dbt_project --profiles-dir /home/knutasm/.dbt --target dev
+2026-05-25 21:48:26 — DEBUG — Result bytes size for command '--log-format json run-operation elementary.log_macro_results --args {"macro_name": "elementary_cli.get_tests", "macro_args": {}} --project-dir /home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/dbt_project --profiles-dir /home/knutasm/.dbt --target dev' is 81648
+2026-05-25 21:48:26 — INFO — Running dbt command --log-format json run-operation elementary.log_macro_results --args {"macro_name": "elementary_cli.get_nodes_depends_on_nodes", "macro_args": {"exclude_elementary": true}} --project-dir /home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/dbt_project --profiles-dir /home/knutasm/.dbt --target dev
+2026-05-25 21:48:27 — DEBUG — Result bytes size for command '--log-format json run-operation elementary.log_macro_results --args {"macro_name": "elementary_cli.get_nodes_depends_on_nodes", "macro_args": {"exclude_elementary": true}} --project-dir /home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/dbt_project --profiles-dir /home/knutasm/.dbt --target dev' is 7242
+2026-05-25 21:48:27 — INFO — Running dbt command --log-format json run-operation elementary.log_macro_results --args {"macro_name": "elementary_cli.get_models_latest_invocation", "macro_args": {}} --project-dir /home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/dbt_project --profiles-dir /home/knutasm/.dbt --target dev
+2026-05-25 21:48:28 — DEBUG — Result bytes size for command '--log-format json run-operation elementary.log_macro_results --args {"macro_name": "elementary_cli.get_models_latest_invocation", "macro_args": {}} --project-dir /home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/dbt_project --profiles-dir /home/knutasm/.dbt --target dev' is 10452
+2026-05-25 21:48:28 — INFO — Running dbt command --log-format json run-operation elementary.log_macro_results --args {"macro_name": "elementary_cli.get_models_latest_invocations_data", "macro_args": {}} --project-dir /home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/dbt_project --profiles-dir /home/knutasm/.dbt --target dev
+2026-05-25 21:48:28 — DEBUG — Result bytes size for command '--log-format json run-operation elementary.log_macro_results --args {"macro_name": "elementary_cli.get_models_latest_invocations_data", "macro_args": {}} --project-dir /home/knutasm/.local/share/uv/tools/elementary-data/lib/python3.11/site-packages/elementary/monitor/dbt_project --profiles-dir /home/knutasm/.dbt --target dev' is 828

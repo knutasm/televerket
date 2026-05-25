@@ -1,0 +1,42 @@
+version: 2
+
+macros:
+  - name: parse_yyyymmdd
+    description: >
+      Parser en YYYYMMDD-formatert streng til DATE.
+      Bruker adapter.dispatch for å velge riktig syntaks basert på database:
+      DuckDB bruker strptime(), BigQuery bruker parse_date(), og alle andre
+      (Snowflake, Postgres) bruker to_date() med YYYYMMDD-format.
+    arguments:
+      - name: column_name
+        type: string
+        description: Kolonnenavnet eller uttrykket som skal parses.
+
+  - name: test_is_positive_or_credited
+    description: >
+      Generisk test som sjekker at en beløpskolonne enten er positiv eller
+      at raden har status = 'credited'. Feiler hvis negative beløp finnes
+      uten kredit-status. Typisk brukt på amount_eur i billing-modeller.
+    arguments:
+      - name: model
+        type: relation
+        description: Modellen som testes (settes automatisk av dbt).
+      - name: column_name
+        type: string
+        description: Beløpskolonnen som skal sjekkes (typisk amount_eur).
+
+  - name: json_extract
+    description: >
+      Pakker ut et enkelt tekstfelt fra en JSON-streng via nøkkelnavn.
+      Bruker adapter.dispatch for riktig syntaks per database:
+      DuckDB bruker json_extract_string(), BigQuery og Postgres bruker
+      json_value(), Snowflake bruker kolon-notasjon.
+    arguments:
+      - name: column_name
+        type: string
+        description: JSON-kolonnen å pakke ut fra.
+      - name: path
+        type: string
+        description: >
+          Feltnavnet å pakke ut, uten $. prefiks. Eksempel: 'make' pakker
+          ut $.make fra JSON-objektet.

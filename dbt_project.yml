@@ -21,14 +21,16 @@ clean-targets:
 
 vars:
   "dbt_date:time_zone": "Europe/Oslo"
+  min_kontrakt_dato:  # E2: overstyr fra CLI: dbt run --vars '{"min_kontrakt_dato": "2022-01-01"}'
 
 seeds:
 
 models:
   televerket:
-    standardize:
-      +materialized: view
     staging:
       +materialized: view
     intermediate:
       +materialized: table
+  elementary:
+    +schema: elementary
+    +materialized: incremental

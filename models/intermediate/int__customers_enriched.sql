@@ -13,6 +13,9 @@ latest_contracts as (
         status
     from {{ ref("stg__crm_contracts") }}
     where status = 'active'
+    {% if var('min_kontrakt_dato', none) is not none %}
+        and start_date >= '{{ var("min_kontrakt_dato") }}'::date
+    {% endif %}
     order by customer_id, start_date desc
 )
 
@@ -38,3 +41,7 @@ select
 from customers as c
 left join latest_contracts as con
     on c.customer_id = con.customer_id
+
+{% if target.name == 'dev' %}
+limit 500
+{% endif %}

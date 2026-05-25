@@ -52,6 +52,13 @@ models:
           - relationships:
               to: ref('stg__crm_customers')
               field: customer_id
+      - name: amount_eur
+        tests:
+          - is_positive_or_credited
+      - name: due_date
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: ">= invoice_date"
 
   - name: stg__billing_payments
     description: >

@@ -3,6 +3,9 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   base: '/televerket/',
   lang: 'nb-NO',
+  head: [
+    ['style', {}, '.VPHero .image-src { max-width: 180px; max-height: 180px; }'],
+  ],
   title: 'Televerket dbt-kurs',
   description: 'Kursmateriale for dbt-kurs basert på det fiktive telekomselskapet Televerket',
 
@@ -38,7 +41,7 @@ export default defineConfig({
   },
 
   themeConfig: {
-    logo: '/etlelt.png',
+    logo: '/televerket.webp',
 
     nav: [
       { text: 'Hjem', link: '/' },

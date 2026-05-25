@@ -38,3 +38,11 @@ tasks:
       - task: gen
       - task: seed
       - task: clean
+
+  docs:dev:
+    cmds:
+      - cd docs/site && npm run dev
+
+  docs:build:
+    cmds:
+      - cd docs/site && npm run build

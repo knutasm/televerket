@@ -17,3 +17,7 @@ profiles.yml
 __pycache__
 jaffle.duckdb
 main.py
+
+docs/site/node_modules/
+docs/site/.vitepress/dist/
+docs/site/.vitepress/cache/

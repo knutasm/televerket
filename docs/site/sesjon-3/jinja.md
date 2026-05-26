@@ -38,7 +38,7 @@ select * from {{ ref('stg_crm__customers') }}
 
 ## Variabler
 
-`{% set %}` definerer en variabel. `{{ }}` setter inn verdien:
+`{% set %}` definerer en variabel. `{{ }}` refererer til en verdi:
 
 ```sql
 {% set kolonne = 'contract_status' %}
@@ -49,7 +49,7 @@ select
 from {{ ref('int_customers__enriched') }}
 ```
 
-Variabler kan holde tekst, tall, lister og ordbøker:
+Variabler kan holde tekst, tall, lister og dictionaries:
 
 ```sql
 {% set grense = 1000 %}
@@ -57,7 +57,7 @@ Variabler kan holde tekst, tall, lister og ordbøker:
 {% set config = {"materialized": "table"} %}
 ```
 
-For nå er det nok å vite at `{% set %}` definerer og `{{ }}` bruker.
+`{% set %}` definerer og `{{ }}` bruker.
 
 ## Betingelser
 
@@ -83,7 +83,7 @@ Med `{% else %}`:
 
 ## `target`-objektet
 
-dbt eksponerer informasjon om kjøremiljøet via `target`:
+dbt eksponerer informasjon om målsystemet via `target`:
 
 | Variabel | Eksempel | Beskrivelse |
 |---|---|---|
@@ -132,7 +132,7 @@ Du finner filtre i flere makroer, som `generate_schema_name`:
 {{ custom_schema_name | trim }}
 ```
 
-Filtre lenkes med `|` og evalueres fra venstre mot høyre.
+Du kan kjøre flere filtre etter hverandre  med `|`, de og evalueres fra venstre mot høyre.
 
 ## Kompilert SQL
 

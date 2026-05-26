@@ -70,21 +70,31 @@ export default defineConfig({
     sidebar: [
       {
         text: 'Sesjon 1',
+        link: '/sesjon-1/',
         items: [
-          { text: 'Den moderne datastakken og dbt', link: '/sesjon-1/' },
+          { text: 'Motivasjon', link: '/sesjon-1/motivasjon' },
+          { text: 'Hva er dbt', link: '/sesjon-1/dbt' },
+          { text: 'Første modell', link: '/sesjon-1/forste-modell' },
         ],
       },
       {
         text: 'Sesjon 2 — Sources og staging',
+        link: '/sesjon-2/',
         items: [
-          { text: 'Slides', link: '/sesjon-2/' },
+          { text: 'Sources og seeds', link: '/sesjon-2/sources-og-seeds' },
+          { text: 'Staging og materialisering', link: '/sesjon-2/staging' },
+          { text: 'Intermediate-modeller', link: '/sesjon-2/intermediate' },
+          { text: 'Testing', link: '/sesjon-2/testing' },
           { text: 'Oppgaver', link: '/sesjon-2/oppgaver' },
         ],
       },
       {
         text: 'Sesjon 3 — Jinja, makroer og pakker',
+        link: '/sesjon-3/',
         items: [
-          { text: 'Slides', link: '/sesjon-3/' },
+          { text: 'Jinja og templating', link: '/sesjon-3/jinja' },
+          { text: 'Makroer', link: '/sesjon-3/makroer' },
+          { text: 'dbt-pakke-økosystemet', link: '/sesjon-3/pakker' },
           { text: 'Oppgaver', link: '/sesjon-3/oppgaver' },
         ],
       },
